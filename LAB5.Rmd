@@ -1,6 +1,6 @@
 ---
 title: "LAB 5"
-author: "Hassan Mazari"
+author: "Ahad Imran"
 date: "2025-04-02"
 output:
   pdf_document: default
