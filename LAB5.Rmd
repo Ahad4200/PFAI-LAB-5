@@ -1,0 +1,104 @@
+---
+title: "LAB 5"
+author: "Hassan Mazari"
+date: "2025-04-02"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#TASK 1 GETTING STARTED
+
+```{r}
+print("Hello, R!")
+sessionInfo()
+```
+
+# Load libraries
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(caret)
+```
+
+# TASK 2 Working with Data Imports
+
+```{r}
+data_csv <- read.csv("F:/R_codes/csv_data_iris.csv", header = TRUE, stringsAsFactors = FALSE)
+head(data_csv)  # Display the first few rows of the dataset
+
+library(readxl)
+iris_data <- read_excel("F:/R_codes/excel_data_iris.xlsx")
+head(iris_data)
+```
+
+# TASK 3 DATA PREPROCESSING AND SUMMARY
+
+```{r}
+clean_iris <- na.omit(iris)  # Remove rows with missing values\
+
+library(dplyr)
+filtered_iris <- iris %>% filter(Sepal.Length > 5.5)
+
+summary_data <- iris %>%
+    group_by(Species) %>%
+    summarize(mean_sepal_length = mean(Sepal.Length))
+print(summary_data)
+```
+
+# TASK 4 DATA VISUALIZATION
+
+```{r}
+#BAR CHART
+library(ggplot2)
+
+ggplot(iris, aes(x = Species, y = Sepal.Length)) +
+    geom_bar(stat = "summary", fun = "mean") +
+    labs(title = "Average Sepal Length per Species")
+
+#SCATTER PLOT
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+    geom_point() +
+    labs(title = "Scatter Plot of Sepal vs Petal Length")
+
+#INTERACTIVE VISUALIZATION
+library(plotly)
+
+plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length, 
+        type = "scatter", mode = "markers", color = ~Species)
+```
+
+TASK 5 ADVANCE ANALYSIS
+```{r}
+#LINEAR REGRESSION
+model <- lm(Petal.Length ~ Sepal.Length, data = iris)
+summary(model)  # Check model details
+
+#CLUSTERING
+clusters <- kmeans(iris[, 1:4], centers = 3)
+iris$Cluster <- as.factor(clusters$cluster)
+
+ggplot(iris, aes(Sepal.Length, Petal.Length, color = Cluster)) +
+    geom_point()
+
+#MACINE LEARNING WITH CARET
+library(caret)
+
+model <- train(Species ~ ., data = iris, method = "rf", trControl = trainControl(method = "cv", number = 5))
+print(model)
+```
+
+Save Cleaned Data
+```{r}
+write.csv(iris, "cleaned_iris.csv", row.names = FALSE)
+```
+
+Conclusion
+
+This report analyzed the Iris dataset, performed exploratory data analysis, visualized relationships, and implemented a Random Forest classification model.
+
